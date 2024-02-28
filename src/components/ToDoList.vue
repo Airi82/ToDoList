@@ -14,7 +14,7 @@
 
       <!-- ToDoリスト -->
       <div v-for="todo in todos" key="id" class="p-3 m-2 rounded-md min-w-full flex items-center justify-between">
-        <p :class="{ 'line-through    ': todo.isCompleted }">{{ todo.title }}</p>
+        <p>{{ todo.title }}</p>
         <div>
             <!-- 完了ボタン -->
             <button v-show="!todo.isCompleted" @click="toggleComplete(todo.id)" class="py-1 px-2 bg-green-500 hover:bg-green-300 mx-1 rounded-md text-white">
@@ -41,10 +41,10 @@
 import { ref, reactive } from 'vue';
 const todoInput = ref('');
 const todos = reactive([
-  {
+{
     id: 1,
     title: 'Task to do',
-    isCompleted: true,
+    isCompleted: false,
   },
   {
     id: 2,
@@ -55,24 +55,29 @@ const todos = reactive([
 
 // 削除処理
 function deleteTodo(id) {
-  todos.pop(id);
-  console.log('delete');
+    const index = todos.findIndex((todo) => todo.id === id);
+    todos.splice(index,1);
+    console.log('delete');
 }
 
 // 追加処理
 function addTodo() {
-  todos.push({
-    id: todos.length + 1,
-    title: todoInput.value,
-    isCompleted: false,
-  });
-  todoInput.value = '';
-  console.log('add');
+    todos.push({
+        id: todos.length + 1,
+        title: todoInput.value,
+        isCompleted: false,
+    });
+    todoInput.value = '';
+    console.log('add');
 }
 
 // 完了 未完了処理
 function toggleComplete(id) {
-  const index = todos.findIndex((todo) => todo.id === id);
-  todos[index].isCompleted = !todos[index].isCompleted;
+    const index = todos.findIndex((todo) => todo.id === id);
+    if(!todos[index].isCompleted ){
+        todos.splice(index,1);
+    }else{
+        todos[index].isCompleted = !todos[index].isCompleted;
+    }
 }
 </script>
